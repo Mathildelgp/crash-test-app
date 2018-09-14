@@ -3,6 +3,19 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
+const express = require('express');
+const cors = require('cors');
+
+// Declarer l'application
+const app = express()
+
+// Middleware
+// serveur apache -> se definit dans le fichier htaccess
+// Cross origin
+app.use(cors());
+// Parse
+app.use(express.json());
+
 // CONNECTION
 
 const connect = {
@@ -61,22 +74,39 @@ const UserSchema = new Schema ({
 // Permet de definir un set de methodes accessible pour votre collection ou un item de votre collection 
 const UserModel = mongoose.model('Users', UserSchema);
 
-// Creates a user
-const newUser = UserModel({
-  name : 'Erika',
-  mail : 'erika@gmail.com',
-  hash : 'IH45OHXLA467RXG'
+// Definir les requetes
+
+app.get('/users', (req, res) => {
+  UserModel
+    .find()
+    .then( data => {
+      console.log(data);
+      // MVC : Model View Controller
+      // Il peut soit utiliser une view
+      // pour construire une template server-side
+      // h1 data.title
+      //  div.content data.content
+
+      // ce qui est envoyé au front
+      // C'est un fichier html deja construit
+      // Avec eventuellement quelques script js
+      // d'animation etc..
+
+      // res.send(fichier)
+
+      // MVVM : Model View View Model
+      // res.send(data)
+      res.send(data);
+
+  })
 });
 
-// Saves it in the DB
-newUser.save();
+// Je lance le serveur
+app.listen(3000, err => {
+  if (!err) console.log('ca marche j\'coute sur le port 3000');
+})
 
-// Finds a user that is named Erika
-UserModel
-  .find({name: 'Erika'})
-  .then( data => {
-    console.log(data);
-  });
+
 
 
 

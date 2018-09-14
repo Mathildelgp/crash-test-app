@@ -51,6 +51,7 @@ process.on('SIGINT', err => {
 
 // EN noSQL
 // Schema prototype un moule general pour ma table/collection
+// C'est un peu comme une @Entity en Java.
 const UserSchema = new Schema ({
   name : {
     type: String,

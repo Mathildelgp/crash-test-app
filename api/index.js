@@ -5,11 +5,12 @@ const authController = require('./controllers/auth');
 
 const apiRouter = express.Router();
 
-apiRouter.get('/users', userController.findAll);
+
+// protect route
+apiRouter.get('/users', authController.verify_token, userController.findAll);
 
 apiRouter.post('/signup', authController.signup);
 apiRouter.post('/signin', authController.signin);
-apiRouter.get('/validate', authController.validate);
 
 // apiRouter.use(productRouter)
 module.exports = apiRouter;

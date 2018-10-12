@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:front": "(cd public && npm start)"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,8 @@
     "bcrypt": "^3.0.1",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
     "mongoose": "^5.2.14"
   }
 }

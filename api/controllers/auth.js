@@ -5,7 +5,6 @@ const moment = require('moment');
 
 const db = require('../../db');
 
-
 function generate_token (user) {
   const payload = {
     exp: moment().add(14, 'days').unix(), // 1014 - 1015
@@ -14,7 +13,7 @@ function generate_token (user) {
     sub : user.hash
   }
   //global.app.secret
-  return jwt.sign(payload, 'rhododendron');
+  return jwt.sign(payload, global.secret);
 }
 
 
@@ -57,13 +56,39 @@ const authController = {
   },
 
   verify_token : (req, res, next) => {
+    console.log(req);
     const token = req.query.token;
 
     if (!token) res.send ('Authorization Required');
     else {
-      jwt.verify(token, 'rhododendron', (err, decoded_payload) => {
+      jwt.verify(token, global.secret, (err, decoded_payload) => {
         if (err) res.send('Invalid token');
         if (decoded_payload.exp < moment().unix()) res.send('Token expired');
+        else next();
+      });
+    }
+  },
+
+  verify_admin : (req, res, next) => {
+    const token = req.query.token;
+
+    if (!token) res.send ('Authorization Required');
+    else {
+      jwt.verify(token, global.secret, (err, decoded_payload) => {
+        if (err) res.send('Invalid token');
+        if (decoded_payload.exp < moment().unix()) res.send('Token expired');
+        if (decoded_payload.iss) {
+          db.Users.find({mail : decoded_payload.iss})
+          .then(users => {
+            if (users[0]&& users[0].admin ) console.log('SHOULD NOT ENTER ELSE STATEMENT');
+            if (users[0] && users[0].admin ){
+              next();
+            }
+            else {
+              res.send('Access Denied');
+            }
+          }); 
+        }
         else next();
       });
     }

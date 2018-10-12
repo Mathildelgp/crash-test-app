@@ -8,6 +8,7 @@ const apiRouter = express.Router();
 
 // protect route
 apiRouter.get('/users', authController.verify_token, userController.findAll);
+apiRouter.get('/backoffice', authController.verify_admin, userController.findAll);
 
 apiRouter.post('/signup', authController.signup);
 apiRouter.post('/signin', authController.signin);

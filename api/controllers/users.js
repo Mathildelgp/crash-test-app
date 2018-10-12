@@ -2,6 +2,8 @@ const express = require('express');
 
 const db = require('../../db');
 
+console.log(global.secret);
+
 // Si il s'agit d'authentification direct/endpoint
 // je n'utilise pas le controller users
 
@@ -35,6 +37,7 @@ userController = {
         res.send(data);
     })
   }
+
 };
 
 module.exports = userController;
